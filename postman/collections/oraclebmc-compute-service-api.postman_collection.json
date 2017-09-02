@@ -1,0 +1,10 @@
+{
+	"variables": [],
+	"info": {
+		"name": "oraclebmc-compute-service-api",
+		"_postman_id": "000a0a67-96f2-5b2e-f6a6-6efc9e87a944",
+		"description": "<p>/<i>20160918</i></p>\n<p>API for Compute Service.</p>\n<br/>\n<p><b>API Endpoints:</b></p>\n • https://iaas.us-phoenix-1.oraclecloud.com<br/>",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": []
+}

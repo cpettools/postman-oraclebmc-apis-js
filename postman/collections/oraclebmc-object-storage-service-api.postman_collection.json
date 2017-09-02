@@ -1,0 +1,1977 @@
+{
+	"variables": [],
+	"info": {
+		"name": "oraclebmc-object-storage-service-api",
+		"_postman_id": "87aa7253-83d4-ae3e-92fa-ceec28939f48",
+		"description": "<p>API for managing buckets and objects.</p>\n<br/>\n<p><b>API Endpoints:</b></p>\n • https://objectstorage.us-phoenix-1.oraclecloud.com<br/>\n • https://swiftobjectstorage.us-phoenix-1.oraclecloud.com<br/>",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Bucket",
+			"description": "<p>A bucket is a container for storing objects in a compartment within a namespace. A bucket is associated with a single compartment. The compartment has policies that indicate what actions a user can perform on a bucket and all the objects in the bucket. For more information, see <a href=\"https://docs.us-phoenix-1.oraclecloud.com/Content/Object/Tasks/managingbuckets.htm\">Managing Buckets</a>.\n</p>\n<p>To use any of the API operations, you must be authorized in an IAM policy. If you're not authorized, talk to an administrator. If you're an administrator who needs to write policies to give users access, see <a href=\"https://docs.us-phoenix-1.oraclecloud.com/Content/Identity/Concepts/policygetstarted.htm\">Getting Started with Policies</a>.\n</p>",
+			"item": [
+				{
+					"name": "list-buckets",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"// Use private key PEM variable to create a new RequestSigner",
+									"var signer = new bmc.RequestSigner(environment[\"PRIVATE_KEY_PEM\"]);",
+									"",
+									"// Create read-only object containing the request context",
+									"var context = {",
+									"\tAPI_HOST : \"objectstorage.us-phoenix-1.oraclecloud.com\",",
+									"\tAPI_VERSION : \"\",",
+									"\tAPI_TENANCY : environment[\"TENANCY\"],",
+									"\tAPI_USER : environment[\"API_USER\"],",
+									"\tAPI_FINGERPRINT : environment[\"API_FINGERPRINT\"],",
+									"\tSTORAGE_NAMESPACE : environment[\"NAMESPACE_NAME\"] ",
+									"};",
+									"",
+									"var _url = new URL(request.url.trim()",
+									"    .replace(\"{{API_HOST}}\", context[\"API_HOST\"])",
+									"    .replace(\"{{API_VERSION}}\", context[\"API_VERSION\"])",
+									"    .replace(\"{{TENANCY}}\", context[\"API_TENANCY\"])",
+									"    .replace(\"{{COMPARTMENT}}\", environment[\"COMPARTMENT\"])",
+									"    .replace(\"{{NAMESPACE_NAME}}\", context[\"STORAGE_NAMESPACE\"])",
+									");",
+									"",
+									"var _request = {",
+									"\tmethod : request.method,",
+									"\turl : _url,",
+									"\theaders : request.headers,",
+									"\tdata : request.data,",
+									"\tdataMode : request.dataMode",
+									"};",
+									"",
+									"// Set POSTMAN environment variables associated with url",
+									"postman.setEnvironmentVariable('API_HOST', context[\"API_HOST\"]);",
+									"postman.setEnvironmentVariable('API_VERSION', context[\"API_VERSION\"]);",
+									"",
+									"var atz_header = signer.sign(context, _request);",
+									"",
+									"// Set POSTMAN environment variables associate with headers",
+									"postman.setEnvironmentVariable(\"AUTHORIZATION_HEADER\", atz_header);",
+									"postman.setEnvironmentVariable('REQUEST_TARGET_HEADER', signer.headers[\"REQUEST_TARGET\"]);",
+									"postman.setEnvironmentVariable('DATE_HEADER', signer.headers[\"DATE\"]);",
+									"postman.setEnvironmentVariable(\"OPC_REQUEST_ID_HEADER\", signer.headers[\"OPC_REQUEST_ID\"]);"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"raw": "https://{{API_HOST}}/n/{{NAMESPACE_NAME}}/b?compartmentId={{COMPARTMENT}}",
+							"protocol": "https",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"path": [
+								"n",
+								"{{NAMESPACE_NAME}}",
+								"b"
+							],
+							"query": [
+								{
+									"key": "compartmentId",
+									"value": "{{COMPARTMENT}}",
+									"equals": true,
+									"description": ""
+								}
+							],
+							"variable": []
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Date",
+								"value": "{{DATE_HEADER}}",
+								"description": ""
+							},
+							{
+								"key": "(request-target)",
+								"value": "{{REQUEST_TARGET_HEADER}}",
+								"description": ""
+							},
+							{
+								"key": "Host",
+								"value": "{{API_HOST}}",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "{{AUTHORIZATION_HEADER}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "opc-request-id",
+								"value": "{{OPC_REQUEST_ID_HEADER}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": "<p>/n/{namespaceName}/b?compartmentId={compartmentId}\n</p>\n • <i><b>namespaceName:</b></i> {{NAMESPACE_NAME}}<br/>\n • <i><b>compartmentId:</b></i> ocid1.compartment.oc1..aaaaaaaafvx4awspkss5ykbtofwiunh2tpgu46bknt5nurk3ynnjqe66mikq<br/>\n<p>Gets a list of all <b>BucketSummarys</b> in a compartment. A <b>BucketSummary</b> contains only summary fields for the bucket and does not contain fields like the user-defined metadata.</p>\n<p>To use this and other API operations, you must be authorized in an IAM policy. If you're not authorized, talk to an administrator. If you're an administrator who needs to write policies to give users access, see <a href=\"https://docs.us-phoenix-1.oraclecloud.com/Content/Identity/Concepts/policygetstarted.htm\">Getting Started with Policies</a>.</p>"
+					},
+					"response": []
+				},
+				{
+					"name": "get-bucket",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"// Use private key PEM variable to create a new RequestSigner",
+									"var signer = new bmc.RequestSigner(environment[\"PRIVATE_KEY_PEM\"]);",
+									"",
+									"// Create read-only object containing the request context",
+									"var context = {",
+									"\tAPI_HOST : \"objectstorage.us-phoenix-1.oraclecloud.com\",",
+									"\tAPI_VERSION : \"\",",
+									"\tAPI_TENANCY : environment[\"TENANCY\"],",
+									"\tAPI_USER : environment[\"API_USER\"],",
+									"\tAPI_FINGERPRINT : environment[\"API_FINGERPRINT\"],",
+									"\tSTORAGE_NAMESPACE : environment[\"NAMESPACE_NAME\"] ",
+									"};",
+									"",
+									"var _url = new URL(request.url.trim()",
+									"    .replace(\"{{API_HOST}}\", context[\"API_HOST\"])",
+									"    .replace(\"{{API_VERSION}}\", context[\"API_VERSION\"])",
+									"    .replace(\"{{TENANCY}}\", context[\"API_TENANCY\"])",
+									"    .replace(\"{{COMPARTMENT}}\", environment[\"COMPARTMENT\"])",
+									"    .replace(\"{{NAMESPACE_NAME}}\", context[\"STORAGE_NAMESPACE\"])",
+									");",
+									"",
+									"var _request = {",
+									"\tmethod : request.method,",
+									"\turl : _url,",
+									"\theaders : request.headers,",
+									"\tdata : request.data,",
+									"\tdataMode : request.dataMode",
+									"};",
+									"",
+									"// Set POSTMAN environment variables associated with url",
+									"postman.setEnvironmentVariable('API_HOST', context[\"API_HOST\"]);",
+									"postman.setEnvironmentVariable('API_VERSION', context[\"API_VERSION\"]);",
+									"",
+									"var atz_header = signer.sign(context, _request);",
+									"",
+									"// Set POSTMAN environment variables associate with headers",
+									"postman.setEnvironmentVariable(\"AUTHORIZATION_HEADER\", atz_header);",
+									"postman.setEnvironmentVariable('REQUEST_TARGET_HEADER', signer.headers[\"REQUEST_TARGET\"]);",
+									"postman.setEnvironmentVariable('DATE_HEADER', signer.headers[\"DATE\"]);",
+									"postman.setEnvironmentVariable(\"OPC_REQUEST_ID_HEADER\", signer.headers[\"OPC_REQUEST_ID\"]);"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "https://{{API_HOST}}/n/{{NAMESPACE_NAME}}/b/S3_Bucket/",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Date",
+								"value": "{{DATE_HEADER}}",
+								"description": ""
+							},
+							{
+								"key": "(request-target)",
+								"value": "{{REQUEST_TARGET_HEADER}}",
+								"description": ""
+							},
+							{
+								"key": "Host",
+								"value": "{{API_HOST}}",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "{{AUTHORIZATION_HEADER}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "opc-request-id",
+								"value": "{{OPC_REQUEST_ID_HEADER}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": "<p>/n/{namespaceName}/b/{bucketName}/\n</p>\n • <i><b>namespaceName:</b></i> {{NAMESPACE_NAME}}<br/>\n • <i><b>bucketName:</b></i> S3_Bucket<br/>\n<p>Gets the current representation of the given bucket in the given namespace.</p>"
+					},
+					"response": []
+				},
+				{
+					"name": "head-bucket",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"// Use private key PEM variable to create a new RequestSigner",
+									"var signer = new bmc.RequestSigner(environment[\"PRIVATE_KEY_PEM\"]);",
+									"",
+									"// Create read-only object containing the request context",
+									"var context = {",
+									"\tAPI_HOST : \"objectstorage.us-phoenix-1.oraclecloud.com\",",
+									"\tAPI_VERSION : \"\",",
+									"\tAPI_TENANCY : environment[\"TENANCY\"],",
+									"\tAPI_USER : environment[\"API_USER\"],",
+									"\tAPI_FINGERPRINT : environment[\"API_FINGERPRINT\"],",
+									"\tSTORAGE_NAMESPACE : environment[\"NAMESPACE_NAME\"] ",
+									"};",
+									"",
+									"var _url = new URL(request.url.trim()",
+									"    .replace(\"{{API_HOST}}\", context[\"API_HOST\"])",
+									"    .replace(\"{{API_VERSION}}\", context[\"API_VERSION\"])",
+									"    .replace(\"{{TENANCY}}\", context[\"API_TENANCY\"])",
+									"    .replace(\"{{COMPARTMENT}}\", environment[\"COMPARTMENT\"])",
+									"    .replace(\"{{NAMESPACE_NAME}}\", context[\"STORAGE_NAMESPACE\"])",
+									");",
+									"",
+									"var _request = {",
+									"\tmethod : request.method,",
+									"\turl : _url,",
+									"\theaders : request.headers,",
+									"\tdata : request.data,",
+									"\tdataMode : request.dataMode",
+									"};",
+									"",
+									"// Set POSTMAN environment variables associated with url",
+									"postman.setEnvironmentVariable('API_HOST', context[\"API_HOST\"]);",
+									"postman.setEnvironmentVariable('API_VERSION', context[\"API_VERSION\"]);",
+									"",
+									"var atz_header = signer.sign(context, _request);",
+									"",
+									"// Set POSTMAN environment variables associate with headers",
+									"postman.setEnvironmentVariable(\"AUTHORIZATION_HEADER\", atz_header);",
+									"postman.setEnvironmentVariable('REQUEST_TARGET_HEADER', signer.headers[\"REQUEST_TARGET\"]);",
+									"postman.setEnvironmentVariable('DATE_HEADER', signer.headers[\"DATE\"]);",
+									"postman.setEnvironmentVariable(\"OPC_REQUEST_ID_HEADER\", signer.headers[\"OPC_REQUEST_ID\"]);"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "https://{{API_HOST}}/n/{{NAMESPACE_NAME}}/b/S3_Bucket/",
+						"method": "HEAD",
+						"header": [
+							{
+								"key": "Date",
+								"value": "{{DATE_HEADER}}",
+								"description": ""
+							},
+							{
+								"key": "(request-target)",
+								"value": "{{REQUEST_TARGET_HEADER}}",
+								"description": ""
+							},
+							{
+								"key": "Host",
+								"value": "{{API_HOST}}",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "{{AUTHORIZATION_HEADER}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "opc-request-id",
+								"value": "{{OPC_REQUEST_ID_HEADER}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": "<p>/n/{namespaceName}/b/{bucketName}/\n</p>\n • <i><b>namespaceName:</b></i> {{NAMESPACE_NAME}}<br/>\n • <i><b>bucketName:</b></i> S3_Bucket<br/>\n<p>Efficiently checks if a bucket exists and gets the current ETag for the bucket.</p>"
+					},
+					"response": []
+				},
+				{
+					"name": "update-bucket",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"// Use private key PEM variable to create a new RequestSigner",
+									"var signer = new bmc.RequestSigner(environment[\"PRIVATE_KEY_PEM\"]);",
+									"",
+									"// Create read-only object containing the request context",
+									"var context = {",
+									"\tAPI_HOST : \"objectstorage.us-phoenix-1.oraclecloud.com\",",
+									"\tAPI_VERSION : \"\",",
+									"\tAPI_TENANCY : environment[\"TENANCY\"],",
+									"\tAPI_USER : environment[\"API_USER\"],",
+									"\tAPI_FINGERPRINT : environment[\"API_FINGERPRINT\"],",
+									"\tSTORAGE_NAMESPACE : environment[\"NAMESPACE_NAME\"] ",
+									"};",
+									"",
+									"var _url = new URL(request.url.trim()",
+									"    .replace(\"{{API_HOST}}\", context[\"API_HOST\"])",
+									"    .replace(\"{{API_VERSION}}\", context[\"API_VERSION\"])",
+									"    .replace(\"{{TENANCY}}\", context[\"API_TENANCY\"])",
+									"    .replace(\"{{COMPARTMENT}}\", environment[\"COMPARTMENT\"])",
+									"    .replace(\"{{NAMESPACE_NAME}}\", context[\"STORAGE_NAMESPACE\"])",
+									");",
+									"",
+									"var _request = {",
+									"\tmethod : request.method,",
+									"\turl : _url,",
+									"\theaders : request.headers,",
+									"\tdata : request.data,",
+									"\tdataMode : request.dataMode",
+									"};",
+									"",
+									"// Set POSTMAN environment variables associated with url",
+									"postman.setEnvironmentVariable('API_HOST', context[\"API_HOST\"]);",
+									"postman.setEnvironmentVariable('API_VERSION', context[\"API_VERSION\"]);",
+									"",
+									"var atz_header = signer.sign(context, _request);",
+									"",
+									"// Set POSTMAN environment variables associate with headers",
+									"postman.setEnvironmentVariable(\"AUTHORIZATION_HEADER\", atz_header);",
+									"postman.setEnvironmentVariable('REQUEST_TARGET_HEADER', signer.headers[\"REQUEST_TARGET\"]);",
+									"postman.setEnvironmentVariable('DATE_HEADER', signer.headers[\"DATE\"]);",
+									"postman.setEnvironmentVariable(\"OPC_REQUEST_ID_HEADER\", signer.headers[\"OPC_REQUEST_ID\"]);",
+									"",
+									"// Set POSTMAN environment variables associate with additional headers",
+									"postman.setEnvironmentVariable('X_CONTENT_SHA256_HEADER', signer.headers[\"X_CONTENT_SHA256\"]);",
+									"postman.setEnvironmentVariable('CONTENT_LENGTH_HEADER', signer.headers[\"CONTENT_LENGTH\"]);"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "https://{{API_HOST}}/n/{{NAMESPACE_NAME}}/b/S3_Bucket/",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Date",
+								"value": "{{DATE_HEADER}}",
+								"description": ""
+							},
+							{
+								"key": "(request-target)",
+								"value": "{{REQUEST_TARGET_HEADER}}",
+								"description": ""
+							},
+							{
+								"key": "Host",
+								"value": "{{API_HOST}}",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "{{AUTHORIZATION_HEADER}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Content-Length",
+								"value": "{{CONTENT_LENGTH_HEADER}}",
+								"description": ""
+							},
+							{
+								"key": "opc-request-id",
+								"value": "{{OPC_REQUEST_ID_HEADER}}",
+								"description": ""
+							},
+							{
+								"key": "x-content-sha256",
+								"value": "{{X_CONTENT_SHA256_HEADER}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"S3_Bucket\",\n\t\"metadata\": \n\t{\n\t\t\"foo\" : \"bar\"\n\t},\n\t\"publicAccessType\": \"ObjectRead\"\n}"
+						},
+						"description": "<p>/n/{namespaceName}/b/{bucketName}/\n</p>\n • <i><b>namespaceName:</b></i> {{NAMESPACE_NAME}}<br/>\n • <i><b>bucketName:</b></i> S3_Bucket<br/>\n<p>Performs a partial or full update of a bucket's user-defined metadata.</p>"
+					},
+					"response": []
+				},
+				{
+					"name": "create-bucket",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"// Use private key PEM variable to create a new RequestSigner",
+									"var signer = new bmc.RequestSigner(environment[\"PRIVATE_KEY_PEM\"]);",
+									"",
+									"// Create read-only object containing the request context",
+									"var context = {",
+									"\tAPI_HOST : \"objectstorage.us-phoenix-1.oraclecloud.com\",",
+									"\tAPI_VERSION : \"\",",
+									"\tAPI_TENANCY : environment[\"TENANCY\"],",
+									"\tAPI_USER : environment[\"API_USER\"],",
+									"\tAPI_FINGERPRINT : environment[\"API_FINGERPRINT\"],",
+									"\tSTORAGE_NAMESPACE : environment[\"NAMESPACE_NAME\"] ",
+									"};",
+									"",
+									"var _url = new URL(request.url.trim()",
+									"    .replace(\"{{API_HOST}}\", context[\"API_HOST\"])",
+									"    .replace(\"{{API_VERSION}}\", context[\"API_VERSION\"])",
+									"    .replace(\"{{TENANCY}}\", context[\"API_TENANCY\"])",
+									"    .replace(\"{{COMPARTMENT}}\", environment[\"COMPARTMENT\"])",
+									"    .replace(\"{{NAMESPACE_NAME}}\", context[\"STORAGE_NAMESPACE\"])",
+									");",
+									"",
+									"var _request = {",
+									"\tmethod : request.method,",
+									"\turl : _url,",
+									"\theaders : request.headers,",
+									"\tdata : request.data.replace(\"{{COMPARTMENT}}\", environment[\"COMPARTMENT\"]),",
+									"\tdataMode : request.dataMode",
+									"};",
+									"",
+									"// Set POSTMAN environment variables associated with url",
+									"postman.setEnvironmentVariable('API_HOST', context[\"API_HOST\"]);",
+									"postman.setEnvironmentVariable('API_VERSION', context[\"API_VERSION\"]);",
+									"",
+									"var atz_header = signer.sign(context, _request);",
+									"",
+									"// Set POSTMAN environment variables associate with headers",
+									"postman.setEnvironmentVariable(\"AUTHORIZATION_HEADER\", atz_header);",
+									"postman.setEnvironmentVariable('REQUEST_TARGET_HEADER', signer.headers[\"REQUEST_TARGET\"]);",
+									"postman.setEnvironmentVariable('DATE_HEADER', signer.headers[\"DATE\"]);",
+									"postman.setEnvironmentVariable(\"OPC_REQUEST_ID_HEADER\", signer.headers[\"OPC_REQUEST_ID\"]);",
+									"",
+									"// Set POSTMAN environment variables associate with additional headers",
+									"postman.setEnvironmentVariable('X_CONTENT_SHA256_HEADER', signer.headers[\"X_CONTENT_SHA256\"]);",
+									"postman.setEnvironmentVariable('CONTENT_LENGTH_HEADER', signer.headers[\"CONTENT_LENGTH\"]);"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "https://{{API_HOST}}/n/{{NAMESPACE_NAME}}/b/",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Date",
+								"value": "{{DATE_HEADER}}",
+								"description": ""
+							},
+							{
+								"key": "(request-target)",
+								"value": "{{REQUEST_TARGET_HEADER}}",
+								"description": ""
+							},
+							{
+								"key": "Host",
+								"value": "{{API_HOST}}",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "{{AUTHORIZATION_HEADER}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Content-Length",
+								"value": "{{CONTENT_LENGTH_HEADER}}",
+								"description": ""
+							},
+							{
+								"key": "opc-request-id",
+								"value": "{{OPC_REQUEST_ID_HEADER}}",
+								"description": ""
+							},
+							{
+								"key": "x-content-sha256",
+								"value": "{{X_CONTENT_SHA256_HEADER}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"S3_Bucket\",\n\t\"compartmentId\": \"{{COMPARTMENT}}\",\n\t\"metadata\": \n\t{\n\t\t\"foo\" : \"bar\"\n\t},\n\t\"publicAccessType\": \"NoPublicAccess\"\n}"
+						},
+						"description": "<p>/n/{namespaceName}/b/\n</p>\n • <i><b>namespaceName:</b></i> {{NAMESPACE_NAME}}<br/>\n • <i><b>bucketName:</b></i> S3_Bucket<br/>\n<p>Creates a bucket in the given namespace with a bucket name and optional user-defined metadata.</p>\n<p>To use this and other API operations, you must be authorized in an IAM policy. If you're not authorized, talk to an administrator. If you're an administrator who needs to write policies to give users access, see <a href=\"https://docs.us-phoenix-1.oraclecloud.com/Content/Identity/Concepts/policygetstarted.htm\">Getting Started with Policies</a>.</p>"
+					},
+					"response": []
+				},
+				{
+					"name": "delete-bucket",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"// Use private key PEM variable to create a new RequestSigner",
+									"var signer = new bmc.RequestSigner(environment[\"PRIVATE_KEY_PEM\"]);",
+									"",
+									"// Create read-only object containing the request context",
+									"var context = {",
+									"\tAPI_HOST : \"objectstorage.us-phoenix-1.oraclecloud.com\",",
+									"\tAPI_VERSION : \"\",",
+									"\tAPI_TENANCY : environment[\"TENANCY\"],",
+									"\tAPI_USER : environment[\"API_USER\"],",
+									"\tAPI_FINGERPRINT : environment[\"API_FINGERPRINT\"],",
+									"\tSTORAGE_NAMESPACE : environment[\"NAMESPACE_NAME\"] ",
+									"};",
+									"",
+									"var _url = new URL(request.url.trim()",
+									"    .replace(\"{{API_HOST}}\", context[\"API_HOST\"])",
+									"    .replace(\"{{API_VERSION}}\", context[\"API_VERSION\"])",
+									"    .replace(\"{{TENANCY}}\", context[\"API_TENANCY\"])",
+									"    .replace(\"{{COMPARTMENT}}\", environment[\"COMPARTMENT\"])",
+									"    .replace(\"{{NAMESPACE_NAME}}\", context[\"STORAGE_NAMESPACE\"])",
+									");",
+									"",
+									"var _request = {",
+									"\tmethod : request.method,",
+									"\turl : _url,",
+									"\theaders : request.headers,",
+									"\tdata : request.data,",
+									"\tdataMode : request.dataMode",
+									"};",
+									"",
+									"// Set POSTMAN environment variables associated with url",
+									"postman.setEnvironmentVariable('API_HOST', context[\"API_HOST\"]);",
+									"postman.setEnvironmentVariable('API_VERSION', context[\"API_VERSION\"]);",
+									"",
+									"var atz_header = signer.sign(context, _request);",
+									"",
+									"// Set POSTMAN environment variables associate with headers",
+									"postman.setEnvironmentVariable(\"AUTHORIZATION_HEADER\", atz_header);",
+									"postman.setEnvironmentVariable('REQUEST_TARGET_HEADER', signer.headers[\"REQUEST_TARGET\"]);",
+									"postman.setEnvironmentVariable('DATE_HEADER', signer.headers[\"DATE\"]);",
+									"postman.setEnvironmentVariable(\"OPC_REQUEST_ID_HEADER\", signer.headers[\"OPC_REQUEST_ID\"]);"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "https://{{API_HOST}}/n/{{NAMESPACE_NAME}}/b/{bucketName}/",
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Date",
+								"value": "{{DATE_HEADER}}",
+								"description": ""
+							},
+							{
+								"key": "(request-target)",
+								"value": "{{REQUEST_TARGET_HEADER}}",
+								"description": ""
+							},
+							{
+								"key": "Host",
+								"value": "{{API_HOST}}",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "{{AUTHORIZATION_HEADER}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "opc-request-id",
+								"value": "{{OPC_REQUEST_ID_HEADER}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": "<p>/n/{namespaceName}/b/{bucketName}/\n</p>\n • <i><b>namespaceName:</b></i> {{NAMESPACE_NAME}}<br/>\n • <i><b>bucketName:</b></i> <br/>\n<p>Deletes a bucket if it is already empty. If the bucket is not empty, use <a href=\"https://docs.us-phoenix-1.oraclecloud.com/api/#/en/objectstorage/20160918/methods/DeleteObject\">DeleteObject</a> first.</p>"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "MultipartUpload",
+			"description": "<p>Multipart uploads provide efficient and resilient uploads, especially for large objects. Multipart uploads also accommodate objects that are too large for a single upload operation. With multipart uploads, individual parts of an object can be uploaded in parallel to reduce the amount of time you spend uploading. Multipart uploads can also minimize the impact of network failures by letting you retry a failed part upload instead of requiring you to retry an entire object upload. See <a href=\"https://docs.us-phoenix-1.oraclecloud.com/Content/Object/Tasks/managingmultipartuploads.htm\">Managing Multipart Uploads</a>.\n</p>\n<p>To use any of the API operations, you must be authorized in an IAM policy. If you're not authorized, talk to an administrator. If you're an administrator who needs to write policies to give users access, see <a href=\"https://docs.us-phoenix-1.oraclecloud.com/Content/Identity/Concepts/policygetstarted.htm\">Getting Started with Policies</a>.\n</p>",
+			"item": [
+				{
+					"name": "list-multipart-uploads",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"// Use private key PEM variable to create a new RequestSigner",
+									"var signer = new bmc.RequestSigner(environment[\"PRIVATE_KEY_PEM\"]);",
+									"",
+									"// Create read-only object containing the request context",
+									"var context = {",
+									"\tAPI_HOST : \"objectstorage.us-phoenix-1.oraclecloud.com\",",
+									"\tAPI_VERSION : \"\",",
+									"\tAPI_TENANCY : environment[\"TENANCY\"],",
+									"\tAPI_USER : environment[\"API_USER\"],",
+									"\tAPI_FINGERPRINT : environment[\"API_FINGERPRINT\"],",
+									"\tSTORAGE_NAMESPACE : environment[\"NAMESPACE_NAME\"] ",
+									"};",
+									"",
+									"var _url = new URL(request.url.trim()",
+									"    .replace(\"{{API_HOST}}\", context[\"API_HOST\"])",
+									"    .replace(\"{{API_VERSION}}\", context[\"API_VERSION\"])",
+									"    .replace(\"{{TENANCY}}\", context[\"API_TENANCY\"])",
+									"    .replace(\"{{COMPARTMENT}}\", environment[\"COMPARTMENT\"])",
+									"    .replace(\"{{NAMESPACE_NAME}}\", context[\"STORAGE_NAMESPACE\"])",
+									");",
+									"",
+									"var _request = {",
+									"\tmethod : request.method,",
+									"\turl : _url,",
+									"\theaders : request.headers,",
+									"\tdata : request.data,",
+									"\tdataMode : request.dataMode",
+									"};",
+									"",
+									"// Set POSTMAN environment variables associated with url",
+									"postman.setEnvironmentVariable('API_HOST', context[\"API_HOST\"]);",
+									"postman.setEnvironmentVariable('API_VERSION', context[\"API_VERSION\"]);",
+									"",
+									"var atz_header = signer.sign(context, _request);",
+									"",
+									"// Set POSTMAN environment variables associate with headers",
+									"postman.setEnvironmentVariable(\"AUTHORIZATION_HEADER\", atz_header);",
+									"postman.setEnvironmentVariable('REQUEST_TARGET_HEADER', signer.headers[\"REQUEST_TARGET\"]);",
+									"postman.setEnvironmentVariable('DATE_HEADER', signer.headers[\"DATE\"]);",
+									"postman.setEnvironmentVariable(\"OPC_REQUEST_ID_HEADER\", signer.headers[\"OPC_REQUEST_ID\"]);"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"raw": "https://{{API_HOST}}/n/{{NAMESPACE_NAME}}/b/{bucketName}/u/{objectName}?uploadId={uploadId}",
+							"protocol": "https",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"path": [
+								"n",
+								"{{NAMESPACE_NAME}}",
+								"b",
+								"{bucketName}",
+								"u",
+								"{objectName}"
+							],
+							"query": [
+								{
+									"key": "uploadId",
+									"value": "{uploadId}",
+									"equals": true,
+									"description": ""
+								}
+							],
+							"variable": []
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Date",
+								"value": "{{DATE_HEADER}}",
+								"description": ""
+							},
+							{
+								"key": "(request-target)",
+								"value": "{{REQUEST_TARGET_HEADER}}",
+								"description": ""
+							},
+							{
+								"key": "Host",
+								"value": "{{API_HOST}}",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "{{AUTHORIZATION_HEADER}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "opc-request-id",
+								"value": "{{OPC_REQUEST_ID_HEADER}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"object\": \"S3_Bucket_object_part1\",\n\t\"contentType\": \"application/octet-stream\",\n\t\"metadata\": \"\"\n}"
+						},
+						"description": "<p>/n/{namespaceName}/b/{bucketName}/u\n</p>\n • <i><b>namespaceName:</b></i> {{NAMESPACE_NAME}}<br/>\n • <i><b>bucketName:</b></i> S3_Bucket<br/>\n<p>Lists all in-progress multipart uploads for the given bucket in the given namespace.</p>"
+					},
+					"response": []
+				},
+				{
+					"name": "create-multipart-upload",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"// Use private key PEM variable to create a new RequestSigner",
+									"var signer = new bmc.RequestSigner(environment[\"PRIVATE_KEY_PEM\"]);",
+									"",
+									"// Create read-only object containing the request context",
+									"var context = {",
+									"\tAPI_HOST : \"objectstorage.us-phoenix-1.oraclecloud.com\",",
+									"\tAPI_VERSION : \"\",",
+									"\tAPI_TENANCY : environment[\"TENANCY\"],",
+									"\tAPI_USER : environment[\"API_USER\"],",
+									"\tAPI_FINGERPRINT : environment[\"API_FINGERPRINT\"],",
+									"\tSTORAGE_NAMESPACE : environment[\"NAMESPACE_NAME\"] ",
+									"};",
+									"",
+									"var _url = new URL(request.url.trim()",
+									"    .replace(\"{{API_HOST}}\", context[\"API_HOST\"])",
+									"    .replace(\"{{API_VERSION}}\", context[\"API_VERSION\"])",
+									"    .replace(\"{{TENANCY}}\", context[\"API_TENANCY\"])",
+									"    .replace(\"{{COMPARTMENT}}\", environment[\"COMPARTMENT\"])",
+									"    .replace(\"{{NAMESPACE_NAME}}\", context[\"STORAGE_NAMESPACE\"])",
+									");",
+									"",
+									"var _request = {",
+									"\tmethod : request.method,",
+									"\turl : _url,",
+									"\theaders : request.headers,",
+									"\tdata : request.data,",
+									"\tdataMode : request.dataMode",
+									"};",
+									"",
+									"// Set POSTMAN environment variables associated with url",
+									"postman.setEnvironmentVariable('API_HOST', context[\"API_HOST\"]);",
+									"postman.setEnvironmentVariable('API_VERSION', context[\"API_VERSION\"]);",
+									"",
+									"var atz_header = signer.sign(context, _request);",
+									"",
+									"// Set POSTMAN environment variables associate with headers",
+									"postman.setEnvironmentVariable(\"AUTHORIZATION_HEADER\", atz_header);",
+									"postman.setEnvironmentVariable('REQUEST_TARGET_HEADER', signer.headers[\"REQUEST_TARGET\"]);",
+									"postman.setEnvironmentVariable('DATE_HEADER', signer.headers[\"DATE\"]);",
+									"postman.setEnvironmentVariable(\"OPC_REQUEST_ID_HEADER\", signer.headers[\"OPC_REQUEST_ID\"]);",
+									"",
+									"// Set POSTMAN environment variables associate with additional headers",
+									"postman.setEnvironmentVariable('X_CONTENT_SHA256_HEADER', signer.headers[\"X_CONTENT_SHA256\"]);",
+									"postman.setEnvironmentVariable('CONTENT_LENGTH_HEADER', signer.headers[\"CONTENT_LENGTH\"]);"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "https://{{API_HOST}}/n/{{NAMESPACE_NAME}}/b/S3_Bucket/u",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Date",
+								"value": "{{DATE_HEADER}}",
+								"description": ""
+							},
+							{
+								"key": "(request-target)",
+								"value": "{{REQUEST_TARGET_HEADER}}",
+								"description": ""
+							},
+							{
+								"key": "Host",
+								"value": "{{API_HOST}}",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "{{AUTHORIZATION_HEADER}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Content-Length",
+								"value": "{{CONTENT_LENGTH_HEADER}}",
+								"description": ""
+							},
+							{
+								"key": "opc-request-id",
+								"value": "{{OPC_REQUEST_ID_HEADER}}",
+								"description": ""
+							},
+							{
+								"key": "x-content-sha256",
+								"value": "{{X_CONTENT_SHA256_HEADER}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"object\": \"basses/fender/precision.jpg\",\n\t\"contentType\": \"image/jpeg\",\n\t\"metadata\": {\n\t\t\"opc-meta-src\" : \"https://www.google.com/imgres?imgurl=http%3A%2F%2Fwww.fmicassets.com%2FDamroot%2FZoomJpg%2F10001%2F0143412300_gtr_frt_001_rr.jpg&imgrefurl=http%3A%2F%2Fshop.fender.com%2Fen-US%2Felectric-basses%2Fprecision-bass%2Fdeluxe-active-precision-bass-special%2F0143412300.html&docid=Qj5E-ImfeAz2VM&tbnid=fpIF2FLJ_WjV6M%3A&vet=10ahUKEwiVm6nd0PDUAhVCeCYKHc6LBBIQMwhvKAQwBA..i&w=2400&h=678&bih=1017&biw=1461&q=images%20precision%20bass&ved=0ahUKEwiVm6nd0PDUAhVCeCYKHc6LBBIQMwhvKAQwBA&iact=mrc&uact=8\"\n\t}\n}"
+						},
+						"description": "<p>/n/{namespaceName}/b/{bucketName}/u\n</p>\n • <i><b>namespaceName:</b></i> {{NAMESPACE_NAME}}<br/>\n • <i><b>bucketName:</b></i> S3_Bucket<br/>\n<p>Starts a new multipart upload to a specific object in the given bucket in the given namespace.</p>"
+					},
+					"response": []
+				},
+				{
+					"name": "list-multipart-upload-parts",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"// Use private key PEM variable to create a new RequestSigner",
+									"var signer = new bmc.RequestSigner(environment[\"PRIVATE_KEY_PEM\"]);",
+									"",
+									"// Create read-only object containing the request context",
+									"var context = {",
+									"\tAPI_HOST : \"objectstorage.us-phoenix-1.oraclecloud.com\",",
+									"\tAPI_VERSION : \"\",",
+									"\tAPI_TENANCY : environment[\"TENANCY\"],",
+									"\tAPI_USER : environment[\"API_USER\"],",
+									"\tAPI_FINGERPRINT : environment[\"API_FINGERPRINT\"],",
+									"\tSTORAGE_NAMESPACE : environment[\"NAMESPACE_NAME\"] ",
+									"};",
+									"",
+									"var _url = new URL(request.url.trim()",
+									"    .replace(\"{{API_HOST}}\", context[\"API_HOST\"])",
+									"    .replace(\"{{API_VERSION}}\", context[\"API_VERSION\"])",
+									"    .replace(\"{{TENANCY}}\", context[\"API_TENANCY\"])",
+									"    .replace(\"{{COMPARTMENT}}\", environment[\"COMPARTMENT\"])",
+									"    .replace(\"{{NAMESPACE_NAME}}\", context[\"STORAGE_NAMESPACE\"])",
+									");",
+									"",
+									"var _request = {",
+									"\tmethod : request.method,",
+									"\turl : _url,",
+									"\theaders : request.headers,",
+									"\tdata : request.data,",
+									"\tdataMode : request.dataMode",
+									"};",
+									"",
+									"// Set POSTMAN environment variables associated with url",
+									"postman.setEnvironmentVariable('API_HOST', context[\"API_HOST\"]);",
+									"postman.setEnvironmentVariable('API_VERSION', context[\"API_VERSION\"]);",
+									"",
+									"var atz_header = signer.sign(context, _request);",
+									"",
+									"// Set POSTMAN environment variables associate with headers",
+									"postman.setEnvironmentVariable(\"AUTHORIZATION_HEADER\", atz_header);",
+									"postman.setEnvironmentVariable('REQUEST_TARGET_HEADER', signer.headers[\"REQUEST_TARGET\"]);",
+									"postman.setEnvironmentVariable('DATE_HEADER', signer.headers[\"DATE\"]);",
+									"postman.setEnvironmentVariable(\"OPC_REQUEST_ID_HEADER\", signer.headers[\"OPC_REQUEST_ID\"]);"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"raw": "https://{{API_HOST}}/n/{{NAMESPACE_NAME}}/b/{bucketName}/u/{objectName}?uploadId={uploadId}",
+							"protocol": "https",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"path": [
+								"n",
+								"{{NAMESPACE_NAME}}",
+								"b",
+								"{bucketName}",
+								"u",
+								"{objectName}"
+							],
+							"query": [
+								{
+									"key": "uploadId",
+									"value": "{uploadId}",
+									"equals": true,
+									"description": ""
+								}
+							],
+							"variable": []
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Date",
+								"value": "{{DATE_HEADER}}",
+								"description": ""
+							},
+							{
+								"key": "(request-target)",
+								"value": "{{REQUEST_TARGET_HEADER}}",
+								"description": ""
+							},
+							{
+								"key": "Host",
+								"value": "{{API_HOST}}",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "{{AUTHORIZATION_HEADER}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "opc-request-id",
+								"value": "{{OPC_REQUEST_ID_HEADER}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"object\": \"S3_Bucket_object_part1\",\n\t\"contentType\": \"application/octet-stream\",\n\t\"metadata\": \"\"\n}"
+						},
+						"description": "<p>/n/{namespaceName}/b/{bucketName}/u/{objectName}?uploadId={uploadId}\n</p>\n • <i><b>namespaceName:</b></i> {{NAMESPACE_NAME}}<br/>\n • <i><b>bucketName:</b></i> S3_Bucket<br/>\n • <i><b>objectName:</b></i> test/object1.log<br/>\n • <i><b>uploadId:</b></i> <br/>\n<p>Lists the parts of an in-progress multipart upload.</p>"
+					},
+					"response": []
+				},
+				{
+					"name": "abort-multipart-upload",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"// Use private key PEM variable to create a new RequestSigner",
+									"var signer = new bmc.RequestSigner(environment[\"PRIVATE_KEY_PEM\"]);",
+									"",
+									"// Create read-only object containing the request context",
+									"var context = {",
+									"\tAPI_HOST : \"objectstorage.us-phoenix-1.oraclecloud.com\",",
+									"\tAPI_VERSION : \"\",",
+									"\tAPI_TENANCY : environment[\"TENANCY\"],",
+									"\tAPI_USER : environment[\"API_USER\"],",
+									"\tAPI_FINGERPRINT : environment[\"API_FINGERPRINT\"],",
+									"\tSTORAGE_NAMESPACE : environment[\"NAMESPACE_NAME\"] ",
+									"};",
+									"",
+									"var _url = new URL(request.url.trim()",
+									"    .replace(\"{{API_HOST}}\", context[\"API_HOST\"])",
+									"    .replace(\"{{API_VERSION}}\", context[\"API_VERSION\"])",
+									"    .replace(\"{{TENANCY}}\", context[\"API_TENANCY\"])",
+									"    .replace(\"{{COMPARTMENT}}\", environment[\"COMPARTMENT\"])",
+									"    .replace(\"{{NAMESPACE_NAME}}\", context[\"STORAGE_NAMESPACE\"])",
+									");",
+									"",
+									"var _request = {",
+									"\tmethod : request.method,",
+									"\turl : _url,",
+									"\theaders : request.headers,",
+									"\tdata : request.data,",
+									"\tdataMode : request.dataMode",
+									"};",
+									"",
+									"// Set POSTMAN environment variables associated with url",
+									"postman.setEnvironmentVariable('API_HOST', context[\"API_HOST\"]);",
+									"postman.setEnvironmentVariable('API_VERSION', context[\"API_VERSION\"]);",
+									"",
+									"var atz_header = signer.sign(context, _request);",
+									"",
+									"// Set POSTMAN environment variables associate with headers",
+									"postman.setEnvironmentVariable(\"AUTHORIZATION_HEADER\", atz_header);",
+									"postman.setEnvironmentVariable('REQUEST_TARGET_HEADER', signer.headers[\"REQUEST_TARGET\"]);",
+									"postman.setEnvironmentVariable('DATE_HEADER', signer.headers[\"DATE\"]);",
+									"postman.setEnvironmentVariable(\"OPC_REQUEST_ID_HEADER\", signer.headers[\"OPC_REQUEST_ID\"]);"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"raw": "https://{{API_HOST}}/n/{{NAMESPACE_NAME}}/b/{bucketName}/u/{objectName}?uploadId={uploadId}",
+							"protocol": "https",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"path": [
+								"n",
+								"{{NAMESPACE_NAME}}",
+								"b",
+								"{bucketName}",
+								"u",
+								"{objectName}"
+							],
+							"query": [
+								{
+									"key": "uploadId",
+									"value": "{uploadId}",
+									"equals": true,
+									"description": ""
+								}
+							],
+							"variable": []
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Date",
+								"value": "{{DATE_HEADER}}",
+								"description": ""
+							},
+							{
+								"key": "(request-target)",
+								"value": "{{REQUEST_TARGET_HEADER}}",
+								"description": ""
+							},
+							{
+								"key": "Host",
+								"value": "{{API_HOST}}",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "{{AUTHORIZATION_HEADER}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "opc-request-id",
+								"value": "{{OPC_REQUEST_ID_HEADER}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"object\": \"S3_Bucket_object_part1\",\n\t\"contentType\": \"application/octet-stream\",\n\t\"metadata\": \"\"\n}"
+						},
+						"description": "<p>/n/{namespaceName}/b/{bucketName}/u/{objectName}?uploadId={uploadId}\n</p>\n • <i><b>namespaceName:</b></i> {{NAMESPACE_NAME}}<br/>\n • <i><b>bucketName:</b></i> S3_Bucket<br/>\n • <i><b>objectName:</b></i> test/object1.log<br/>\n • <i><b>uploadId:</b></i> <br/>\n<p>Starts a new multipart upload to a specific object in the given bucket in the given namespace.</p>"
+					},
+					"response": []
+				},
+				{
+					"name": "commit-multipart-upload",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"// Use private key PEM variable to create a new RequestSigner",
+									"var signer = new bmc.RequestSigner(environment[\"PRIVATE_KEY_PEM\"]);",
+									"",
+									"// Create read-only object containing the request context",
+									"var context = {",
+									"\tAPI_HOST : \"objectstorage.us-phoenix-1.oraclecloud.com\",",
+									"\tAPI_VERSION : \"\",",
+									"\tAPI_TENANCY : environment[\"TENANCY\"],",
+									"\tAPI_USER : environment[\"API_USER\"],",
+									"\tAPI_FINGERPRINT : environment[\"API_FINGERPRINT\"],",
+									"\tSTORAGE_NAMESPACE : environment[\"NAMESPACE_NAME\"] ",
+									"};",
+									"",
+									"var _url = new URL(request.url.trim()",
+									"    .replace(\"{{API_HOST}}\", context[\"API_HOST\"])",
+									"    .replace(\"{{API_VERSION}}\", context[\"API_VERSION\"])",
+									"    .replace(\"{{TENANCY}}\", context[\"API_TENANCY\"])",
+									"    .replace(\"{{COMPARTMENT}}\", environment[\"COMPARTMENT\"])",
+									"    .replace(\"{{NAMESPACE_NAME}}\", context[\"STORAGE_NAMESPACE\"])",
+									");",
+									"",
+									"var _request = {",
+									"\tmethod : request.method,",
+									"\turl : _url,",
+									"\theaders : request.headers,",
+									"\tdata : request.data,",
+									"\tdataMode : request.dataMode",
+									"};",
+									"",
+									"// Set POSTMAN environment variables associated with url",
+									"postman.setEnvironmentVariable('API_HOST', context[\"API_HOST\"]);",
+									"postman.setEnvironmentVariable('API_VERSION', context[\"API_VERSION\"]);",
+									"",
+									"var atz_header = signer.sign(context, _request);",
+									"",
+									"// Set POSTMAN environment variables associate with headers",
+									"postman.setEnvironmentVariable(\"AUTHORIZATION_HEADER\", atz_header);",
+									"postman.setEnvironmentVariable('REQUEST_TARGET_HEADER', signer.headers[\"REQUEST_TARGET\"]);",
+									"postman.setEnvironmentVariable('DATE_HEADER', signer.headers[\"DATE\"]);",
+									"postman.setEnvironmentVariable(\"OPC_REQUEST_ID_HEADER\", signer.headers[\"OPC_REQUEST_ID\"]);",
+									"",
+									"// Set POSTMAN environment variables associate with additional headers",
+									"postman.setEnvironmentVariable('X_CONTENT_SHA256_HEADER', signer.headers[\"X_CONTENT_SHA256\"]);",
+									"postman.setEnvironmentVariable('CONTENT_LENGTH_HEADER', signer.headers[\"CONTENT_LENGTH\"]);"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"raw": "https://{{API_HOST}}/n/{{NAMESPACE_NAME}}/b/{bucketName}/u/{objectName}?uploadId={uploadId}",
+							"protocol": "https",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"path": [
+								"n",
+								"{{NAMESPACE_NAME}}",
+								"b",
+								"{bucketName}",
+								"u",
+								"{objectName}"
+							],
+							"query": [
+								{
+									"key": "uploadId",
+									"value": "{uploadId}",
+									"equals": true,
+									"description": ""
+								}
+							],
+							"variable": []
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Date",
+								"value": "{{DATE_HEADER}}",
+								"description": ""
+							},
+							{
+								"key": "(request-target)",
+								"value": "{{REQUEST_TARGET_HEADER}}",
+								"description": ""
+							},
+							{
+								"key": "Host",
+								"value": "{{API_HOST}}",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "{{AUTHORIZATION_HEADER}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Content-Length",
+								"value": "{{CONTENT_LENGTH_HEADER}}",
+								"description": ""
+							},
+							{
+								"key": "opc-request-id",
+								"value": "{{OPC_REQUEST_ID_HEADER}}",
+								"description": ""
+							},
+							{
+								"key": "x-content-sha256",
+								"value": "{{X_CONTENT_SHA256_HEADER}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"object\": \"S3_Bucket_object_part1\",\n\t\"contentType\": \"application/octet-stream\",\n\t\"metadata\": \"\"\n}"
+						},
+						"description": "<p>/n/{namespaceName}/b/{bucketName}/u/{objectName}?uploadId={uploadId}\n</p>\n • <i><b>namespaceName:</b></i> {{NAMESPACE_NAME}}<br/>\n • <i><b>bucketName:</b></i> S3_Bucket<br/>\n • <i><b>objectName:</b></i> test/object1.log<br/>\n • <i><b>uploadId:</b></i> <br/>\n<p>Commits a multipart upload, which involves checking part numbers and ETags of the parts, to create an aggregate object.</p>"
+					},
+					"response": []
+				},
+				{
+					"name": "upload-part",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"// Use private key PEM variable to create a new RequestSigner",
+									"var signer = new bmc.RequestSigner(environment[\"PRIVATE_KEY_PEM\"]);",
+									"",
+									"// Create read-only object containing the request context",
+									"var context = {",
+									"\tAPI_HOST : \"objectstorage.us-phoenix-1.oraclecloud.com\",",
+									"\tAPI_VERSION : \"\",",
+									"\tAPI_TENANCY : environment[\"TENANCY\"],",
+									"\tAPI_USER : environment[\"API_USER\"],",
+									"\tAPI_FINGERPRINT : environment[\"API_FINGERPRINT\"],",
+									"\tSTORAGE_NAMESPACE : environment[\"NAMESPACE_NAME\"] ",
+									"};",
+									"",
+									"var _url = new URL(request.url.trim()",
+									"    .replace(\"{{API_HOST}}\", context[\"API_HOST\"])",
+									"    .replace(\"{{API_VERSION}}\", context[\"API_VERSION\"])",
+									"    .replace(\"{{TENANCY}}\", context[\"API_TENANCY\"])",
+									"    .replace(\"{{COMPARTMENT}}\", environment[\"COMPARTMENT\"])",
+									"    .replace(\"{{NAMESPACE_NAME}}\", context[\"STORAGE_NAMESPACE\"])",
+									");",
+									"",
+									"var _request = {",
+									"\tmethod : request.method,",
+									"\turl : _url,",
+									"\theaders : request.headers,",
+									"\tdata : request.data,",
+									"\tdataMode : request.dataMode",
+									"};",
+									"",
+									"// Set POSTMAN environment variables associated with url",
+									"postman.setEnvironmentVariable('API_HOST', context[\"API_HOST\"]);",
+									"postman.setEnvironmentVariable('API_VERSION', context[\"API_VERSION\"]);",
+									"",
+									"var atz_header = signer.sign(context, _request);",
+									"",
+									"// Set POSTMAN environment variables associate with headers",
+									"postman.setEnvironmentVariable(\"AUTHORIZATION_HEADER\", atz_header);",
+									"postman.setEnvironmentVariable('REQUEST_TARGET_HEADER', signer.headers[\"REQUEST_TARGET\"]);",
+									"postman.setEnvironmentVariable('DATE_HEADER', signer.headers[\"DATE\"]);",
+									"postman.setEnvironmentVariable(\"OPC_REQUEST_ID_HEADER\", signer.headers[\"OPC_REQUEST_ID\"]);",
+									"",
+									"// Set POSTMAN environment variables associate with additional headers",
+									"postman.setEnvironmentVariable('X_CONTENT_SHA256_HEADER', signer.headers[\"X_CONTENT_SHA256\"]);",
+									"postman.setEnvironmentVariable('CONTENT_LENGTH_HEADER', signer.headers[\"CONTENT_LENGTH\"]);"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"raw": "https://{{API_HOST}}/n/{{NAMESPACE_NAME}}/b/S3_Bucket/u/basses/fender/precision.jpg?uploadId=c9222408-9c22-0a22-da49-0ee836cb5c18&uploadPartNum=1",
+							"protocol": "https",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"path": [
+								"n",
+								"{{NAMESPACE_NAME}}",
+								"b",
+								"S3_Bucket",
+								"u",
+								"basses",
+								"fender",
+								"precision.jpg"
+							],
+							"query": [
+								{
+									"key": "uploadId",
+									"value": "c9222408-9c22-0a22-da49-0ee836cb5c18",
+									"equals": true,
+									"description": ""
+								},
+								{
+									"key": "uploadPartNum",
+									"value": "1",
+									"equals": true,
+									"description": ""
+								}
+							],
+							"variable": []
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Date",
+								"value": "{{DATE_HEADER}}",
+								"description": ""
+							},
+							{
+								"key": "(request-target)",
+								"value": "{{REQUEST_TARGET_HEADER}}",
+								"description": ""
+							},
+							{
+								"key": "Host",
+								"value": "{{API_HOST}}",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "{{AUTHORIZATION_HEADER}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Content-Length",
+								"value": "{{CONTENT_LENGTH_HEADER}}",
+								"description": ""
+							},
+							{
+								"key": "opc-request-id",
+								"value": "{{OPC_REQUEST_ID_HEADER}}",
+								"description": ""
+							},
+							{
+								"key": "x-content-sha256",
+								"value": "{{X_CONTENT_SHA256_HEADER}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": "<p>/n/{namespaceName}/b/{bucketName}/u/{objectName}?uploadId={uploadId}&uploadPartNum={uploadPartNum}\n</p>\n • <i><b>namespaceName:</b></i> {{NAMESPACE_NAME}}<br/>\n • <i><b>bucketName:</b></i> S3_Bucket<br/>\n • <i><b>objectName:</b></i> basses/fender/precision.jpg<br/>\n • <i><b>uploadId:</b></i> c9222408-9c22-0a22-da49-0ee836cb5c18<br/>\n • <i><b>uploadPartNum:</b></i> 1<br/>\n<p>Uploads a single part of a multipart upload.</p>"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Namespace",
+			"description": "<p>A namespace is the logical entity that lets you own your personal bucket names.</p>\n<p>Bucket names need to be unique within the context of a namespace, but bucket names can be repeated across namespaces. Each tenant is associated with one default namespace (tenant name) that spans all compartments.</p> \n<p>Within a namespace, buckets and objects exist in flat hierarchy, but you can simulate directories to help navigate a large set of objects (for example, <code>guitars/fender/stratocaster.jpg</code>, <code>guitars/gibson/lespaul.jpg</code>).\n</p>\n<p>To use any of the API operations, you must be authorized in an IAM policy. If you're not authorized, talk to an administrator. If you're an administrator who needs to write policies to give users access, see <a href=\"https://docs.us-phoenix-1.oraclecloud.com/Content/Identity/Concepts/policygetstarted.htm\">Getting Started with Policies</a>.\n</p>",
+			"item": [
+				{
+					"name": "get-namespace",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"// Use private key PEM variable to create a new RequestSigner",
+									"var signer = new bmc.RequestSigner(environment[\"PRIVATE_KEY_PEM\"]);",
+									"",
+									"// Create read-only object containing the request context",
+									"var context = {",
+									"\tAPI_HOST : \"objectstorage.us-phoenix-1.oraclecloud.com\",",
+									"\tAPI_VERSION : \"\",",
+									"\tAPI_TENANCY : environment[\"TENANCY\"],",
+									"\tAPI_USER : environment[\"API_USER\"],",
+									"\tAPI_FINGERPRINT : environment[\"API_FINGERPRINT\"],",
+									"\tSTORAGE_NAMESPACE : environment[\"NAMESPACE_NAME\"] ",
+									"};",
+									"",
+									"var _url = new URL(request.url.trim()",
+									"    .replace(\"{{API_HOST}}\", context[\"API_HOST\"])",
+									"    .replace(\"{{API_VERSION}}\", context[\"API_VERSION\"])",
+									"    .replace(\"{{TENANCY}}\", context[\"API_TENANCY\"])",
+									"    .replace(\"{{COMPARTMENT}}\", environment[\"COMPARTMENT\"])",
+									"    .replace(\"{{NAMESPACE_NAME}}\", context[\"STORAGE_NAMESPACE\"])",
+									");",
+									"",
+									"var _request = {",
+									"\tmethod : request.method,",
+									"\turl : _url,",
+									"\theaders : request.headers,",
+									"\tdata : request.data,",
+									"\tdataMode : request.dataMode",
+									"};",
+									"",
+									"// Set POSTMAN environment variables associated with url",
+									"postman.setEnvironmentVariable('API_HOST', context[\"API_HOST\"]);",
+									"postman.setEnvironmentVariable('API_VERSION', context[\"API_VERSION\"]);",
+									"",
+									"var atz_header = signer.sign(context, _request);",
+									"",
+									"// Set POSTMAN environment variables associate with headers",
+									"postman.setEnvironmentVariable(\"AUTHORIZATION_HEADER\", atz_header);",
+									"postman.setEnvironmentVariable('REQUEST_TARGET_HEADER', signer.headers[\"REQUEST_TARGET\"]);",
+									"postman.setEnvironmentVariable('DATE_HEADER', signer.headers[\"DATE\"]);",
+									"postman.setEnvironmentVariable(\"OPC_REQUEST_ID_HEADER\", signer.headers[\"OPC_REQUEST_ID\"]);"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "https://{{API_HOST}}/n/",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Date",
+								"value": "{{DATE_HEADER}}",
+								"description": ""
+							},
+							{
+								"key": "(request-target)",
+								"value": "{{REQUEST_TARGET_HEADER}}",
+								"description": ""
+							},
+							{
+								"key": "Host",
+								"value": "{{API_HOST}}",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "{{AUTHORIZATION_HEADER}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "opc-request-id",
+								"value": "{{OPC_REQUEST_ID_HEADER}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": "<p>/n/\n</p>\n<p>Gets the name of the namespace for the user making the request. An account name must be unique, must start with a letter, and can have up to 15 lowercase letters and numbers. You cannot use spaces or special characters.</p>\n"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Object",
+			"description": "<p>All data, regardless of content type, is stored as objects in the Object Storage Service. For example, log files, video files, and audio files are all stored as objects.\n</p>\n<p>To use any of the API operations, you must be authorized in an IAM policy. If you're not authorized, talk to an administrator. If you're an administrator who needs to write policies to give users access, see <a href=\"https://docs.us-phoenix-1.oraclecloud.com/Content/Identity/Concepts/policygetstarted.htm\">Getting Started with Policies</a>.\n</p>",
+			"item": [
+				{
+					"name": "list-objects",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"// Use private key PEM variable to create a new RequestSigner",
+									"var signer = new bmc.RequestSigner(environment[\"PRIVATE_KEY_PEM\"]);",
+									"",
+									"// Create read-only object containing the request context",
+									"var context = {",
+									"\tAPI_HOST : \"objectstorage.us-phoenix-1.oraclecloud.com\",",
+									"\tAPI_VERSION : \"\",",
+									"\tAPI_TENANCY : environment[\"TENANCY\"],",
+									"\tAPI_USER : environment[\"API_USER\"],",
+									"\tAPI_FINGERPRINT : environment[\"API_FINGERPRINT\"],",
+									"\tSTORAGE_NAMESPACE : environment[\"NAMESPACE_NAME\"] ",
+									"};",
+									"",
+									"var _url = new URL(request.url.trim()",
+									"    .replace(\"{{API_HOST}}\", context[\"API_HOST\"])",
+									"    .replace(\"{{API_VERSION}}\", context[\"API_VERSION\"])",
+									"    .replace(\"{{TENANCY}}\", context[\"API_TENANCY\"])",
+									"    .replace(\"{{COMPARTMENT}}\", environment[\"COMPARTMENT\"])",
+									"    .replace(\"{{NAMESPACE_NAME}}\", context[\"STORAGE_NAMESPACE\"])",
+									");",
+									"",
+									"var _request = {",
+									"\tmethod : request.method,",
+									"\turl : _url,",
+									"\theaders : request.headers,",
+									"\tdata : request.data,",
+									"\tdataMode : request.dataMode",
+									"};",
+									"",
+									"// Set POSTMAN environment variables associated with url",
+									"postman.setEnvironmentVariable('API_HOST', context[\"API_HOST\"]);",
+									"postman.setEnvironmentVariable('API_VERSION', context[\"API_VERSION\"]);",
+									"",
+									"var atz_header = signer.sign(context, _request);",
+									"",
+									"// Set POSTMAN environment variables associate with headers",
+									"postman.setEnvironmentVariable(\"AUTHORIZATION_HEADER\", atz_header);",
+									"postman.setEnvironmentVariable('REQUEST_TARGET_HEADER', signer.headers[\"REQUEST_TARGET\"]);",
+									"postman.setEnvironmentVariable('DATE_HEADER', signer.headers[\"DATE\"]);",
+									"postman.setEnvironmentVariable(\"OPC_REQUEST_ID_HEADER\", signer.headers[\"OPC_REQUEST_ID\"]);"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "https://{{API_HOST}}/n/{{NAMESPACE_NAME}}/b/S3_Bucket/o",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Date",
+								"value": "{{DATE_HEADER}}",
+								"description": ""
+							},
+							{
+								"key": "(request-target)",
+								"value": "{{REQUEST_TARGET_HEADER}}",
+								"description": ""
+							},
+							{
+								"key": "Host",
+								"value": "{{API_HOST}}",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "{{AUTHORIZATION_HEADER}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "opc-request-id",
+								"value": "{{OPC_REQUEST_ID_HEADER}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": "<p>/n/{namespaceName}/b/{bucketName}/o\n</p>\n • <i><b>namespaceName:</b></i> {{NAMESPACE_NAME}}<br/>\n • <i><b>bucketName:</b></i> S3_Bucket<br/>\n<p>Lists the objects in a bucket.</p>\n<p>To use this and other API operations, you must be authorized in an IAM policy. If you're not authorized, talk to an administrator. If you're an administrator who needs to write policies to give users access, see <a href=\"https://docs.us-phoenix-1.oraclecloud.com/Content/Identity/Concepts/policygetstarted.htm\">Getting Started with Policies</a>.</p>"
+					},
+					"response": []
+				},
+				{
+					"name": "get-object",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"// Use private key PEM variable to create a new RequestSigner",
+									"var signer = new bmc.RequestSigner(environment[\"PRIVATE_KEY_PEM\"]);",
+									"",
+									"// Create read-only object containing the request context",
+									"var context = {",
+									"\tAPI_HOST : \"objectstorage.us-phoenix-1.oraclecloud.com\",",
+									"\tAPI_VERSION : \"\",",
+									"\tAPI_TENANCY : environment[\"TENANCY\"],",
+									"\tAPI_USER : environment[\"API_USER\"],",
+									"\tAPI_FINGERPRINT : environment[\"API_FINGERPRINT\"],",
+									"\tSTORAGE_NAMESPACE : environment[\"NAMESPACE_NAME\"] ",
+									"};",
+									"",
+									"var _url = new URL(request.url.trim()",
+									"    .replace(\"{{API_HOST}}\", context[\"API_HOST\"])",
+									"    .replace(\"{{API_VERSION}}\", context[\"API_VERSION\"])",
+									"    .replace(\"{{TENANCY}}\", context[\"API_TENANCY\"])",
+									"    .replace(\"{{COMPARTMENT}}\", environment[\"COMPARTMENT\"])",
+									"    .replace(\"{{NAMESPACE_NAME}}\", context[\"STORAGE_NAMESPACE\"])",
+									");",
+									"",
+									"var _request = {",
+									"\tmethod : request.method,",
+									"\turl : _url,",
+									"\theaders : request.headers,",
+									"\tdata : request.data,",
+									"\tdataMode : request.dataMode",
+									"};",
+									"",
+									"// Set POSTMAN environment variables associated with url",
+									"postman.setEnvironmentVariable('API_HOST', context[\"API_HOST\"]);",
+									"postman.setEnvironmentVariable('API_VERSION', context[\"API_VERSION\"]);",
+									"",
+									"var atz_header = signer.sign(context, _request);",
+									"",
+									"// Set POSTMAN environment variables associate with headers",
+									"postman.setEnvironmentVariable(\"AUTHORIZATION_HEADER\", atz_header);",
+									"postman.setEnvironmentVariable('REQUEST_TARGET_HEADER', signer.headers[\"REQUEST_TARGET\"]);",
+									"postman.setEnvironmentVariable('DATE_HEADER', signer.headers[\"DATE\"]);",
+									"postman.setEnvironmentVariable(\"OPC_REQUEST_ID_HEADER\", signer.headers[\"OPC_REQUEST_ID\"]);"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "https://{{API_HOST}}/n/{{NAMESPACE_NAME}}/b/S3_Bucket/o/basses/fender/jazz.jpg",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Date",
+								"value": "{{DATE_HEADER}}",
+								"description": ""
+							},
+							{
+								"key": "(request-target)",
+								"value": "{{REQUEST_TARGET_HEADER}}",
+								"description": ""
+							},
+							{
+								"key": "Host",
+								"value": "{{API_HOST}}",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "{{AUTHORIZATION_HEADER}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "opc-request-id",
+								"value": "{{OPC_REQUEST_ID_HEADER}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": "<p>/n/{namespaceName}/b/{bucketName}/o/{objectName}\n</p>\n • <i><b>namespaceName:</b></i> {{NAMESPACE_NAME}}<br/>\n • <i><b>bucketName:</b></i> S3_Bucket<br/>\n • <i><b>objectName:</b></i> test/object1.log<br/>\n<p>Gets the metadata and body of an object.</p>"
+					},
+					"response": []
+				},
+				{
+					"name": "head-object",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"// Use private key PEM variable to create a new RequestSigner",
+									"var signer = new bmc.RequestSigner(environment[\"PRIVATE_KEY_PEM\"]);",
+									"",
+									"// Create read-only object containing the request context",
+									"var context = {",
+									"\tAPI_HOST : \"objectstorage.us-phoenix-1.oraclecloud.com\",",
+									"\tAPI_VERSION : \"\",",
+									"\tAPI_TENANCY : environment[\"TENANCY\"],",
+									"\tAPI_USER : environment[\"API_USER\"],",
+									"\tAPI_FINGERPRINT : environment[\"API_FINGERPRINT\"],",
+									"\tSTORAGE_NAMESPACE : environment[\"NAMESPACE_NAME\"] ",
+									"};",
+									"",
+									"var _url = new URL(request.url.trim()",
+									"    .replace(\"{{API_HOST}}\", context[\"API_HOST\"])",
+									"    .replace(\"{{API_VERSION}}\", context[\"API_VERSION\"])",
+									"    .replace(\"{{TENANCY}}\", context[\"API_TENANCY\"])",
+									"    .replace(\"{{COMPARTMENT}}\", environment[\"COMPARTMENT\"])",
+									"    .replace(\"{{NAMESPACE_NAME}}\", context[\"STORAGE_NAMESPACE\"])",
+									");",
+									"",
+									"var _request = {",
+									"\tmethod : request.method,",
+									"\turl : _url,",
+									"\theaders : request.headers,",
+									"\tdata : request.data,",
+									"\tdataMode : request.dataMode",
+									"};",
+									"",
+									"// Set POSTMAN environment variables associated with url",
+									"postman.setEnvironmentVariable('API_HOST', context[\"API_HOST\"]);",
+									"postman.setEnvironmentVariable('API_VERSION', context[\"API_VERSION\"]);",
+									"",
+									"var atz_header = signer.sign(context, _request);",
+									"",
+									"// Set POSTMAN environment variables associate with headers",
+									"postman.setEnvironmentVariable(\"AUTHORIZATION_HEADER\", atz_header);",
+									"postman.setEnvironmentVariable('REQUEST_TARGET_HEADER', signer.headers[\"REQUEST_TARGET\"]);",
+									"postman.setEnvironmentVariable('DATE_HEADER', signer.headers[\"DATE\"]);",
+									"postman.setEnvironmentVariable(\"OPC_REQUEST_ID_HEADER\", signer.headers[\"OPC_REQUEST_ID\"]);"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "https://{{API_HOST}}/n/{{NAMESPACE_NAME}}/b/S3_Bucket/o/{objectName}",
+						"method": "HEAD",
+						"header": [
+							{
+								"key": "Date",
+								"value": "{{DATE_HEADER}}",
+								"description": ""
+							},
+							{
+								"key": "(request-target)",
+								"value": "{{REQUEST_TARGET_HEADER}}",
+								"description": ""
+							},
+							{
+								"key": "Host",
+								"value": "{{API_HOST}}",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "{{AUTHORIZATION_HEADER}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "opc-request-id",
+								"value": "{{OPC_REQUEST_ID_HEADER}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": "<p>/n/{namespaceName}/b/{bucketName}/o/{objectName}\n</p>\n • <i><b>namespaceName:</b></i> {{NAMESPACE_NAME}}<br/>\n • <i><b>bucketName:</b></i> S3_Bucket<br/>\n • <i><b>objectName:</b></i> <br/>\n<p>Gets the user-defined metadata and entity tag for an object.</p>"
+					},
+					"response": []
+				},
+				{
+					"name": "delete-object",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"// Use private key PEM variable to create a new RequestSigner",
+									"var signer = new bmc.RequestSigner(environment[\"PRIVATE_KEY_PEM\"]);",
+									"",
+									"// Create read-only object containing the request context",
+									"var context = {",
+									"\tAPI_HOST : \"objectstorage.us-phoenix-1.oraclecloud.com\",",
+									"\tAPI_VERSION : \"\",",
+									"\tAPI_TENANCY : environment[\"TENANCY\"],",
+									"\tAPI_USER : environment[\"API_USER\"],",
+									"\tAPI_FINGERPRINT : environment[\"API_FINGERPRINT\"],",
+									"\tSTORAGE_NAMESPACE : environment[\"NAMESPACE_NAME\"] ",
+									"};",
+									"",
+									"var _url = new URL(request.url.trim()",
+									"    .replace(\"{{API_HOST}}\", context[\"API_HOST\"])",
+									"    .replace(\"{{API_VERSION}}\", context[\"API_VERSION\"])",
+									"    .replace(\"{{TENANCY}}\", context[\"API_TENANCY\"])",
+									"    .replace(\"{{COMPARTMENT}}\", environment[\"COMPARTMENT\"])",
+									"    .replace(\"{{NAMESPACE_NAME}}\", context[\"STORAGE_NAMESPACE\"])",
+									");",
+									"",
+									"var _request = {",
+									"\tmethod : request.method,",
+									"\turl : _url,",
+									"\theaders : request.headers,",
+									"\tdata : request.data,",
+									"\tdataMode : request.dataMode",
+									"};",
+									"",
+									"// Set POSTMAN environment variables associated with url",
+									"postman.setEnvironmentVariable('API_HOST', context[\"API_HOST\"]);",
+									"postman.setEnvironmentVariable('API_VERSION', context[\"API_VERSION\"]);",
+									"",
+									"var atz_header = signer.sign(context, _request);",
+									"",
+									"// Set POSTMAN environment variables associate with headers",
+									"postman.setEnvironmentVariable(\"AUTHORIZATION_HEADER\", atz_header);",
+									"postman.setEnvironmentVariable('REQUEST_TARGET_HEADER', signer.headers[\"REQUEST_TARGET\"]);",
+									"postman.setEnvironmentVariable('DATE_HEADER', signer.headers[\"DATE\"]);",
+									"postman.setEnvironmentVariable(\"OPC_REQUEST_ID_HEADER\", signer.headers[\"OPC_REQUEST_ID\"]);"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "https://{{API_HOST}}/n/{{NAMESPACE_NAME}}/b/S3_Bucket/o/basses/fender/precision.jpg",
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Date",
+								"value": "{{DATE_HEADER}}",
+								"description": ""
+							},
+							{
+								"key": "(request-target)",
+								"value": "{{REQUEST_TARGET_HEADER}}",
+								"description": ""
+							},
+							{
+								"key": "Host",
+								"value": "{{API_HOST}}",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "{{AUTHORIZATION_HEADER}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "opc-request-id",
+								"value": "{{OPC_REQUEST_ID_HEADER}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": "<p>/n/{namespaceName}/b/{bucketName}/o/{objectName}\n</p>\n • <i><b>namespaceName:</b></i> {{NAMESPACE_NAME}}<br/>\n • <i><b>bucketName:</b></i> S3_Bucket<br/>\n • <i><b>objectName:</b></i> test/object1.log<br/>\n<p>Deletes an object.</p>"
+					},
+					"response": []
+				},
+				{
+					"name": "put-object",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"console.log(request);"
+								]
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"// Use private key PEM variable to create a new RequestSigner",
+									"var signer = new bmc.RequestSigner(environment[\"PRIVATE_KEY_PEM\"]);",
+									"",
+									"// Create read-only object containing the request context",
+									"var context = {",
+									"\tAPI_HOST : \"objectstorage.us-phoenix-1.oraclecloud.com\",",
+									"\tAPI_VERSION : \"\",",
+									"\tAPI_TENANCY : environment[\"TENANCY\"],",
+									"\tAPI_USER : environment[\"API_USER\"],",
+									"\tAPI_FINGERPRINT : environment[\"API_FINGERPRINT\"],",
+									"\tSTORAGE_NAMESPACE : environment[\"NAMESPACE_NAME\"] ",
+									"};",
+									"",
+									"var _url = new URL(request.url.trim()",
+									"    .replace(\"{{API_HOST}}\", context[\"API_HOST\"])",
+									"    .replace(\"{{API_VERSION}}\", context[\"API_VERSION\"])",
+									"    .replace(\"{{TENANCY}}\", context[\"API_TENANCY\"])",
+									"    .replace(\"{{COMPARTMENT}}\", environment[\"COMPARTMENT\"])",
+									"    .replace(\"{{NAMESPACE_NAME}}\", context[\"STORAGE_NAMESPACE\"])",
+									");",
+									"",
+									"var _request = {",
+									"\tmethod : request.method,",
+									"\turl : _url,",
+									"\theaders : request.headers,",
+									"\tdata : request.data,",
+									"\tdataMode : request.dataMode",
+									"};",
+									"",
+									"// Set POSTMAN environment variables associated with url",
+									"postman.setEnvironmentVariable('API_HOST', context[\"API_HOST\"]);",
+									"postman.setEnvironmentVariable('API_VERSION', context[\"API_VERSION\"]);",
+									"",
+									"var atz_header = signer.sign(context, _request);",
+									"",
+									"// Set POSTMAN environment variables associate with headers",
+									"postman.setEnvironmentVariable(\"AUTHORIZATION_HEADER\", atz_header);",
+									"postman.setEnvironmentVariable('REQUEST_TARGET_HEADER', signer.headers[\"REQUEST_TARGET\"]);",
+									"postman.setEnvironmentVariable('DATE_HEADER', signer.headers[\"DATE\"]);",
+									"postman.setEnvironmentVariable(\"OPC_REQUEST_ID_HEADER\", signer.headers[\"OPC_REQUEST_ID\"]);",
+									"",
+									"// Set POSTMAN environment variables associate with additional headers",
+									"postman.setEnvironmentVariable('CONTENT_LENGTH_HEADER', signer.headers[\"CONTENT_LENGTH\"]);"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "https://{{API_HOST}}/n/{{NAMESPACE_NAME}}/b/S3_Bucket/o/basses/fender/precision.jpg",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Date",
+								"value": "{{DATE_HEADER}}",
+								"description": ""
+							},
+							{
+								"key": "(request-target)",
+								"value": "{{REQUEST_TARGET_HEADER}}",
+								"description": ""
+							},
+							{
+								"key": "Host",
+								"value": "{{API_HOST}}",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "{{AUTHORIZATION_HEADER}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/octet-stream",
+								"description": ""
+							},
+							{
+								"key": "Content-Length",
+								"value": "{{CONTENT_LENGTH_HEADER}}",
+								"description": ""
+							},
+							{
+								"key": "opc-request-id",
+								"value": "{{OPC_REQUEST_ID_HEADER}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "file",
+							"file": {
+								"src": ""
+							}
+						},
+						"description": "<p>/n/{namespaceName}/b/{bucketName}/o/{objectName}\n</p>\n • <i><b>namespaceName:</b></i> {{NAMESPACE_NAME}}<br/>\n • <i><b>bucketName:</b></i> S3_Bucket<br/>\n • <i><b>objectName:</b></i> test/object1.log<br/>\n<p>Creates a new object or overwrites an existing one.</p>\n<p>To use this and other API operations, you must be authorized in an IAM policy. If you're not authorized, talk to an administrator. If you're an administrator who needs to write policies to give users access, see <a href=\"https://docs.us-phoenix-1.oraclecloud.com/Content/Identity/Concepts/policygetstarted.htm\">Getting Started with Policies</a>.</p>"
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

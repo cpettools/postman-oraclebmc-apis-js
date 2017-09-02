@@ -1,0 +1,10 @@
+{
+	"variables": [],
+	"info": {
+		"name": "oraclebmc-block-storage-service-api",
+		"_postman_id": "f89cb221-5145-1890-f883-26c90f090934",
+		"description": "<p>/<i>20160918</i></p>\n<p>API for Block Volume Service.</p>\n<br/>\n<p><b>API Endpoints:</b></p>\n • https://iaas.us-phoenix-1.oraclecloud.com<br/>",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": []
+}

@@ -1,0 +1,10 @@
+{
+	"variables": [],
+	"info": {
+		"name": "oraclebmc-audit-api",
+		"_postman_id": "29a453f8-11e6-5901-040c-a5938edf8f77",
+		"description": "<p>/<i>20160918</i></p>\n<p>API for the Audit Service.</p>\n<p>You can use this API for queries, but not bulk-export operations.</p>\n<br/>\n<p><b>API Endpoints:</b></p>\n • https://audit.us-phoenix-1.oraclecloud.com<br/>",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": []
+}

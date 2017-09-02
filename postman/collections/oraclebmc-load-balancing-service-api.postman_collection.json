@@ -1,0 +1,10 @@
+{
+	"variables": [],
+	"info": {
+		"name": "oraclebmc-load-balancing-service-api",
+		"_postman_id": "150b651e-50d5-450c-c262-d1f2317d7d80",
+		"description": "<p>/<i>20170115</i></p>\n<p>API for the Load Balancing Service.</p>\n<p>You can use the table of contents or the version selector and search tool to explore the Load Balancing Service API.</p>\n<br/>\n<p><b>API Endpoints:</b></p>\n • https://iaas.us-phoenix-1.oraclecloud.com<br/>",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": []
+}

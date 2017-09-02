@@ -1,0 +1,10 @@
+{
+	"variables": [],
+	"info": {
+		"name": "oraclebmc-iam-service-api",
+		"_postman_id": "6c89ad56-9b02-ee43-24f0-dcc0816865a4",
+		"description": "<p>/<i>20160918</i></p>\n<p>API for managing users, groups, compartments, and policies.</p>\n<p>You can use the table of contents or the version selector and search tool to explore the Identity and Access Management Service API.</p>\n<br/>\n<p><b>API Endpoints:</b></p>\n • https://identity.us-phoenix-1.oraclecloud.com<br/>",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": []
+}

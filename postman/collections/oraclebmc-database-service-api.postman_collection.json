@@ -1,0 +1,10 @@
+{
+	"variables": [],
+	"info": {
+		"name": "oraclebmc-database-service-api",
+		"_postman_id": "bf9af116-3587-6c9a-e461-30741bcf31a6",
+		"description": "<p>/<i>20160918</i></p>\n<p>API for the Database Service.</p>\n<p>You can use the table of contents or the version selector and search tool to explore the Database Service API.</p>\n<br/>\n<p><b>API Endpoints:</b></p>\n • https://database.us-phoenix-1.oraclecloud.com<br/>",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": []
+}

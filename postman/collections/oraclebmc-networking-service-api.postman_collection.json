@@ -1,0 +1,10 @@
+{
+	"variables": [],
+	"info": {
+		"name": "oraclebmc-networking-service-api",
+		"_postman_id": "bd20d260-e312-9750-1ac3-6a60c7ea71b0",
+		"description": "<p>/<i>20160918</i></p>\n<p>API for Networking Service.</p>\n<br/>\n<p><b>API Endpoints:</b></p>\n • https://iaas.us-phoenix-1.oraclecloud.com<br/>",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": []
+}
